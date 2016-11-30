@@ -13,6 +13,8 @@ antigen-theme pygmalion
 # Tell antigen that you're done.
 antigen apply
 
-export HOMEBREW_GITHUB_API_TOKEN=631f17d79dfd6d80af73b4c4e5fc91edbc6489fa
+source .cred.sh
+
 PATH=/usr/local/bin:$PATH
-alias gcfg='/usr/local/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+alias gitconfig='/usr/local/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
