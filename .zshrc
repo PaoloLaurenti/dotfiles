@@ -17,4 +17,7 @@ source .cred.sh
 
 PATH=/usr/local/bin:$PATH
 
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
 alias gitconfig='/usr/local/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
