@@ -80,6 +80,9 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
+" Format document
+map <F7> mzgg=G`z
+
 " Run an external command with only single bang
 nnoremap ! :!
 
