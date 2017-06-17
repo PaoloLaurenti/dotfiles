@@ -13,3 +13,6 @@ antigen theme pygmalion
 
 # Tell antigen that you're done.
 antigen apply
+
+source $HOME/.asdf/asdf.sh
+source $HOME/.asdf/completions/asdf.bash
