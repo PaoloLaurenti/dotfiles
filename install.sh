@@ -38,6 +38,11 @@ else
 fi
 
 echo "make links between $DOT_FILES_DIR and $HOME"
+
+echo ".zshrc"
 rm -f ~/.zshrc && ln -sf "$DOT_FILES_DIR/.zshrc" ~/.zshrc
+
+echo "vscode .settings"
+rm -f ~/.config/Code/User/settings.json && ln -sf "$DOT_FILES_DIR/vscode/settings.json" ~/.config/Code/User/settings.json
 
 echo "done"
