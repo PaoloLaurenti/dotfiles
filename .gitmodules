@@ -1,3 +1,0 @@
-[submodule "dot-files/antigen"]
-	path = dot-files/antigen
-	url = https://github.com/zsh-users/antigen.git
