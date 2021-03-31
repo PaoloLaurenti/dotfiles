@@ -4,6 +4,9 @@ DOT_FILES_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 echo "setup zsh"
 
+echo "download last antigen script version"
+curl -L git.io/antigen > antigen.zsh
+
 if [ "$SHELL" = "/bin/zsh" ]
 then
   echo "zsh is already the default shell"
