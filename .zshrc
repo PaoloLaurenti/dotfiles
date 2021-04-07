@@ -25,4 +25,4 @@ antigen apply
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
-source $HOME/dotfiles/custom.sh
+. $HOME/dotfiles/custom.sh
