@@ -1,5 +1,4 @@
 source $HOME/dotfiles/antigen.zsh
-source $HOME/dotfiles/custom.sh
 
 export ERL_AFLAGS="-kernel shell_history enabled"
 
@@ -25,3 +24,5 @@ antigen apply
 
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
+
+source $HOME/dotfiles/custom.sh
