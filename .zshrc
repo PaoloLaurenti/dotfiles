@@ -26,4 +26,7 @@ autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
 . $HOME/dotfiles/custom.sh
+
+export LESS=-FRX
+
 alias rest-net="sudo /etc/init.d/network-manager restart"
