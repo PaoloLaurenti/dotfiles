@@ -10,9 +10,9 @@ antigen bundle git
 antigen bundle mix
 antigen bundle heroku
 antigen bundle npm
+antigen bundle docker-compose
 antigen bundle fabiokiatkowski/exercism.plugin.zsh
 antigen bundle zsh-users/zsh-completions
-antigen bundle jonmosco/kube-ps1
 antigen bundle droctothorpe/kubecolor
 antigen bundle mattbangert/kubectl-zsh-plugin
 
