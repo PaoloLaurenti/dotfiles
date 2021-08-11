@@ -28,5 +28,6 @@ autoload -U +X bashcompinit && bashcompinit
 . $HOME/dotfiles/custom.sh
 
 export LESS=-FRX
+export EDITOR=nano
 
 alias rest-net="sudo /etc/init.d/network-manager restart"
