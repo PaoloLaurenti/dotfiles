@@ -17,6 +17,11 @@ Execute following commands to install configuration files.
     $ cd ~/dotfiles
     $ ./install.sh
 
+Il repo può risiedere in qualsiasi cartella (non deve per forza essere
+`~/dotfiles`): il `.zshrc` risolve da sé la propria directory seguendo il
+symlink `~/.zshrc`, quindi plugin e `custom.sh` vengono caricati dalla
+posizione reale del repo.
+
 Lo script:
 
 - installa antidote (via Homebrew su macOS, via `git clone` su Linux);

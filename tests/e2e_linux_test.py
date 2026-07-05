@@ -77,3 +77,51 @@ def test_pygmalion_theme_loaded(installed_container):
     assert "git_prompt_info: function" in out
     # Il prompt di pygmalion contiene la sequenza utente@host:path
     assert "%n" in out and "%m" in out
+
+
+# --- Regressione: repo clonato FUORI da ~/dotfiles -------------------------
+# Il .zshrc deve risolvere la propria directory dal symlink ~/.zshrc; se
+# tornassero i percorsi hardcoded ($HOME/dotfiles) antidote non troverebbe
+# .zsh_plugins.txt e il source di custom.sh fallirebbe.
+
+ALT_DOTFILES_HOME = f"{HOME}/Dev/personal/dotfiles"
+
+
+@pytest.fixture(scope="module")
+def installed_container_alt_path():
+    container = (
+        DockerContainer("debian:bookworm")
+        .with_command("sleep infinity")
+        .with_volume_mapping(str(DOTFILES_DIR), "/src", "ro")
+    )
+    with container:
+        sh(container, "apt-get update -qq && apt-get install -y -qq git curl zsh sudo ca-certificates")
+        # Clone fresco in una posizione arbitraria, NON ~/dotfiles.
+        sh(container, f"mkdir -p {ALT_DOTFILES_HOME} && cp -a /src/. {ALT_DOTFILES_HOME}/ "
+                      f"&& rm -rf {ALT_DOTFILES_HOME}/.git "
+                      f"&& rm -f {ALT_DOTFILES_HOME}/custom.sh {ALT_DOTFILES_HOME}/.zsh_plugins.zsh")
+        sh(container, f"cd {ALT_DOTFILES_HOME} && SHELL=/bin/bash bash install.sh")
+        yield container
+
+
+def test_alt_path_zshrc_symlink(installed_container_alt_path):
+    _, out = sh(installed_container_alt_path, f"readlink {HOME}/.zshrc")
+    assert out.strip() == f"{ALT_DOTFILES_HOME}/.zshrc"
+
+
+def test_alt_path_starts_clean(installed_container_alt_path):
+    """Con il repo fuori da ~/dotfiles la shell deve comunque partire pulita."""
+    code, out = sh(installed_container_alt_path, "zsh -ic 'echo STARTED_OK; exit' 2>&1", check=False)
+    assert code == 0, out
+    assert "STARTED_OK" in out
+    for marker in ("command not found", "no such file", "not found", "parse error"):
+        assert marker not in out.lower(), out
+    # Non deve mai cercare bundle nel percorso hardcoded ~/dotfiles.
+    assert f"{HOME}/dotfiles" not in out
+
+
+def test_alt_path_theme_loaded(installed_container_alt_path):
+    _, out = sh(installed_container_alt_path,
+                "zsh -ic 'whence -w git_prompt_info; print -r -- $PROMPT; exit' 2>/dev/null")
+    assert "git_prompt_info: function" in out
+    assert "%n" in out and "%m" in out

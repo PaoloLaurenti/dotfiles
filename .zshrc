@@ -11,10 +11,14 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 
-# Load plugins and theme (see .zsh_plugins.txt).
-antidote load $HOME/dotfiles/.zsh_plugins.txt
+# Resolve this file's own directory (follows the ~/.zshrc symlink), so the
+# dotfiles repo can live anywhere, not only in ~/dotfiles.
+DOTFILES_DIR="${${(%):-%N}:A:h}"
 
-. $HOME/dotfiles/custom.sh
+# Load plugins and theme (see .zsh_plugins.txt).
+antidote load "$DOTFILES_DIR/.zsh_plugins.txt"
+
+. "$DOTFILES_DIR/custom.sh"
 
 export LESS=-FRX
 export EDITOR=nano

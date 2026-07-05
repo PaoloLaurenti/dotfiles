@@ -1,2 +1,8 @@
 custom.sh
 .zsh_plugins.zsh
+
+# Python (test)
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
