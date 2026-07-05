@@ -1,0 +1,10 @@
+# Plugin zsh gestiti da antidote (stessi bundle della precedente config antigen)
+ohmyzsh/ohmyzsh path:lib
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/mix kind:fpath
+ohmyzsh/ohmyzsh path:plugins/npm
+ohmyzsh/ohmyzsh path:plugins/docker-compose
+zsh-users/zsh-completions
+droctothorpe/kubecolor
+mattbangert/kubectl-zsh-plugin path:kubectl.zsh.plugin
+ohmyzsh/ohmyzsh path:themes/pygmalion.zsh-theme

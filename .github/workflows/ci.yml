@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  linux:
+    name: Linux (Testcontainers e2e + BATS)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install zsh and bats
+        run: sudo apt-get update && sudo apt-get install -y zsh bats
+
+      - name: Install test dependencies
+        run: pip install -r tests/requirements.txt
+
+      - name: Run e2e test (Debian container via Testcontainers)
+        run: pytest tests/e2e_linux_test.py -v
+
+      - name: Run BATS unit tests
+        run: bats tests/unit/
+
+  macos:
+    name: macOS (native install + BATS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Link repo to ~/dotfiles (path expected by .zshrc)
+        run: ln -s "$GITHUB_WORKSPACE" "$HOME/dotfiles"
+
+      - name: Run install.sh
+        # SHELL=/bin/zsh salta il ramo chsh (interattivo, non testabile in CI)
+        run: cd "$HOME/dotfiles" && SHELL=/bin/zsh ./install.sh
+
+      - name: Verify installation
+        run: |
+          test -L "$HOME/.zshrc"
+          test -f "$HOME/dotfiles/custom.sh"
+          test -f "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+
+      - name: Verify zsh starts clean (plugins + theme load)
+        run: |
+          zsh -ic 'echo STARTED_OK; exit' 2>&1 | tee /tmp/zsh_out
+          grep -q STARTED_OK /tmp/zsh_out
+          ! grep -iE "command not found|no such file|parse error" /tmp/zsh_out
+
+      - name: Verify rest-net alias is the macOS variant
+        run: zsh -ic 'alias rest-net; exit' | grep "ifconfig en0"
+
+      - name: Run BATS unit tests
+        run: |
+          brew install bats-core
+          bats tests/unit/

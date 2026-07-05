@@ -1,33 +1,26 @@
-source $HOME/dotfiles/antigen.zsh
+# antidote: da Homebrew su macOS, da ~/.antidote su Linux
+if [[ "$OSTYPE" == darwin* ]]; then
+  source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+else
+  source "$HOME/.antidote/antidote.zsh"
+fi
 
 export ERL_AFLAGS="-kernel shell_history enabled"
 
-# Load the oh-my-zsh's library.
-antigen use oh-my-zsh
-
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle git
-antigen bundle mix
-antigen bundle heroku
-antigen bundle npm
-antigen bundle docker-compose
-antigen bundle fabiokiatkowski/exercism.plugin.zsh
-antigen bundle zsh-users/zsh-completions
-antigen bundle droctothorpe/kubecolor
-antigen bundle mattbangert/kubectl-zsh-plugin
-
-# Load the theme.
-antigen theme pygmalion
-
-# Tell antigen that you're done.
-antigen apply
-
+# compinit must run before plugins that call compdef at load time.
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
+
+# Load plugins and theme (see .zsh_plugins.txt).
+antidote load $HOME/dotfiles/.zsh_plugins.txt
 
 . $HOME/dotfiles/custom.sh
 
 export LESS=-FRX
 export EDITOR=nano
 
-alias rest-net="sudo /etc/init.d/network-manager restart"
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias rest-net="sudo ifconfig en0 down && sudo ifconfig en0 up"
+else
+  alias rest-net="sudo /etc/init.d/network-manager restart"
+fi
